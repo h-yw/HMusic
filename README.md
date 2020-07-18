@@ -10,6 +10,8 @@
 ## 安装
 ```
 $ git clone git@github.com:Binaryify/NeteaseCloudMusicApi.git
+$ npm install 
+
 $ git clone https://github.com/mr-houyw/NetMusic.git
 $ npm install
 ```
@@ -17,7 +19,8 @@ $ npm install
 ## 运行
 ```
 $ cd NeteaseCloudMusicApi
-$ node app
+$ node app 
+
 $ cd NetMusic
 $ npm run serve
 ```
