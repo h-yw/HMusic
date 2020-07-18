@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../test/test.css">
+</head>
+
+<body>
+  <div>
+    <div id="newsong" v-show="isPlaylistShow">
+      <div id="s">
+        <ul ref="songul">
+          <li v-for="(playlist, index) in playlists.playlists" :key="index" @click="toDetail(id=playlist.id)">
+            <!-- <li v-for="(playlist, index) in playlists.playlists" :key="index"> -->
+            <div id="song">
+              <div id="dimg">
+                <img :src="playlist.coverImgUrl" />
+              </div>
+              <div id="dname">
+                <span :title="playlist.name">{{playlist.name}}</span>
+                <span :title="playlist.creator.nickname">
+                  <i>by</i>
+                  {{playlist.creator.nickname}}
+                </span>
+              </div>
+            </div>
+            <!-- </li> -->
+          </li>
+        </ul>
+      </div>
+      <div id="slide">
+        <button class="btn-down" v-on:click="slideUp()">👆</button>
+        <div class="page">
+          <label for="inputnum">
+            <input id="inputnum" type="number" v-model="inputPage" defaultValue="1"
+              :max="Math.ceil(this.playlists.total /15)" min="1" @blur="getInpPage()" />
+            <span>{{Math.ceil(this.playlists.total /15)}}</span>
+          </label>
+        </div>
+        <button class="btn-up" v-on:click="slideDown()">👇</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <select name="" id="">
+      <option value="">1</option>
+      <option value="">2</option>
+      <option value="">3</option>
+      <option value="">4</option>
+      <option value="">5</option>
+    </select>
+  </div>
+</body>
+
+</html>
