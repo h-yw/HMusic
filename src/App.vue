@@ -29,7 +29,7 @@ export default {
   height: 100%;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-size: 16px;
-  background: #fafafa;
+  background: #dae1e7;
 }
 #nav {
   width: 100%;
