@@ -1,6 +1,8 @@
 <template>
   <div>
-    <banner></banner>
+    <div class="swiper">
+      <banner></banner>
+    </div>
     <newsong v-bind:state="true"></newsong>
   </div>
 </template>
@@ -14,6 +16,21 @@ export default {
   components: {
     banner,
     newsong
+  },
+  mounted () {
+    // console.log(this)
+  },
+  beforeUpdate () {
+    console.log(this)
   }
 }
 </script>
+<style lang="scss" scoped>
+div {
+  .swiper {
+    width: 100%;
+    height: 385px;
+    // background: gray;
+  }
+}
+</style>

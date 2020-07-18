@@ -1,19 +1,20 @@
 <template>
-  <div id="banner">
+  <div
+    id="banner"
+    :style="'background:url('+banners[backgroundnum].imageUrl+'?imageView&blur=40x20)'"
+  >
     <div id="bannerlist">
       <ul>
-        <li
-          v-for="(banner, index) in banners"
-          :key="index"
-          :style="{ backgroundImage:'url('+banner.imageUrl+'?param=982y380)',opacity: active?0:1}"
-        >
+        <li v-for="(banner, index) in banners" :key="index">
+          <!-- :style="{ backgroundImage:'url('+banner.imageUrl+'?param=982y380)'}" -->
+          <img ref="imgli" :src="banner.imageUrl+'?param=982y380'" alt />
           <a :href="banner.url"></a>
         </li>
       </ul>
     </div>
     <div id="dotlist">
       <ul v-on:click="selectDot($event)">
-        <li v-for="n in dotnum " :key="n" :class="n==1?'active':''"></li>
+        <li ref="dots" v-for="n in dotnum " :key="n" :class="n===0?'active':''"></li>
       </ul>
     </div>
   </div>
@@ -31,28 +32,62 @@ export default {
       currentIndex: 0,
       timer: null,
       active: false,
-      dotactive: false
+      dotactive: false,
+      backgroundnum: 0
     }
   },
   methods: {
     selectDot: function (event) {
-      console.log(event.target)
+      for (let index = 0; index < event.target.parentNode.children.length; index++) {
+        if (event.target === event.target.parentNode.children[index] && event.target.tagName === 'LI') {
+          console.log('true', event.target)
+          console.log(this.$refs.imgli)
+          for (let i = 0; i < this.$refs.imgli.length; i++) {
+            if (i === index) {
+              this.$refs.imgli[i].setAttribute('style', 'opacity:1')
+            } else {
+              this.$refs.imgli[i].setAttribute('style', 'opacity:0')
+            }
+          }
+          event.target.setAttribute('class', 'active')
+        } else {
+          event.target.parentNode.children[index].removeAttribute('class')
+        }
+      }
     }
-
   },
-  beforeMount () {
+  mounted () {
     axios.get('/banner').then(res => {
-      console.log(res.data)
+      // console.log(res.data)
       this.banners = res.data.banners
       this.dotnum = res.data.banners.length
-      // for (var i = 0; i < this.banners.length; i++) {
-      //   this.titleColor[i] = this.banners[i].titleColor
-      // }
     }).catch(err => {
       console.log('err: ', err)
     })
+  },
+  updated () {
+    var c = 0
+    clearInterval(this.timer)
+    this.timer = setInterval(() => {
+      this.$set(this.$data, 'backgroundnum', c)
+      this.$refs.imgli[c].setAttribute('style', 'opacity:1')
+      this.$refs.dots[c].setAttribute('class', 'active')
+      for (let i = 0; i < this.$refs.imgli.length; i++) {
+        if (i !== c) {
+          this.$refs.imgli[i].setAttribute('style', 'opacity:0')
+          this.$refs.dots[i].removeAttribute('class')
+        }
+      }
+      c += 1
+      if (c === this.$refs.imgli.length) {
+        c = 0
+      }
+    }, 4000)
+    // console.log(this.$refs)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   }
-
 }
 </script>
 <style lang="scss" scoped>
@@ -60,6 +95,8 @@ export default {
   position: relative;
   width: 100%;
   height: 380px;
+  background-size: 6000px;
+  background-position: center center;
   #bannerlist {
     position: relative;
     width: 982px;
@@ -78,7 +115,7 @@ export default {
         background: center no-repeat;
         position: absolute;
         left: 0;
-        top: 5px;
+        // top: 5px;
         // opacity: 0;
         z-index: 1;
         a {
