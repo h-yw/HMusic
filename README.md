@@ -13,13 +13,14 @@ $ git clone git@github.com:Binaryify/NeteaseCloudMusicApi.git
 $ git clone https://github.com/mr-houyw/NetMusic.git
 $ npm install
 ```
-###运行
+
+## 运行
 ```
 $ cd NeteaseCloudMusicApi
 $ node app
-
 $ cd NetMusic
 $ npm run serve
 ```
+
 ## API接口
 [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
