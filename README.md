@@ -1,5 +1,7 @@
 # netmusic
 
+## API接口
+     (Binaryify/NeteaseCloudMusicApi)[https://github.com/mr-houyw/NetMusic]
 ## Project setup
 ```
 npm install
