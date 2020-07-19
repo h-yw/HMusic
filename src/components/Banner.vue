@@ -33,17 +33,18 @@ export default {
       timer: null,
       active: false,
       dotactive: false,
-      backgroundnum: 0
+      backgroundnum: 0,
+      count: 0
     }
   },
   methods: {
     selectDot: function (event) {
       for (let index = 0; index < event.target.parentNode.children.length; index++) {
         if (event.target === event.target.parentNode.children[index] && event.target.tagName === 'LI') {
-          console.log('true', event.target)
-          console.log(this.$refs.imgli)
           for (let i = 0; i < this.$refs.imgli.length; i++) {
             if (i === index) {
+              this.$set(this.$data, 'count', i)
+              this.count = i
               this.$refs.imgli[i].setAttribute('style', 'opacity:1')
             } else {
               this.$refs.imgli[i].setAttribute('style', 'opacity:0')
@@ -64,29 +65,34 @@ export default {
     }).catch(err => {
       console.log('err: ', err)
     })
-  },
-  updated () {
-    var c = 0
-    clearInterval(this.timer)
+    console.log('mounted')
+    // this.count = 0
     this.timer = setInterval(() => {
-      this.$set(this.$data, 'backgroundnum', c)
-      this.$refs.imgli[c].setAttribute('style', 'opacity:1')
-      this.$refs.dots[c].setAttribute('class', 'active')
+      this.$set(this.$data, 'backgroundnum', this.count)
+      this.$refs.imgli[this.count].setAttribute('style', 'opacity:1')
+      this.$refs.dots[this.count].setAttribute('class', 'active')
       for (let i = 0; i < this.$refs.imgli.length; i++) {
-        if (i !== c) {
+        if (i !== this.count) {
           this.$refs.imgli[i].setAttribute('style', 'opacity:0')
           this.$refs.dots[i].removeAttribute('class')
         }
       }
-      c += 1
-      if (c === this.$refs.imgli.length) {
-        c = 0
+      this.count += 1
+      console.log(this.count)
+      if (this.count === this.$refs.imgli.length) {
+        this.count = 0
+        // clearInterval(this.timer)
+        // this.timer = null
+        console.log('clear', this.count)
       }
-    }, 4000)
-    // console.log(this.$refs)
+    }, 3000)
+  },
+  updated () {
   },
   beforeDestroy () {
     clearInterval(this.timer)
+    console.log('dddd')
+    this.timer = null
   }
 }
 </script>

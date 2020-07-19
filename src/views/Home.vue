@@ -21,7 +21,7 @@ export default {
     // console.log(this)
   },
   beforeUpdate () {
-    console.log(this)
+    // console.log(this)
   }
 }
 </script>
