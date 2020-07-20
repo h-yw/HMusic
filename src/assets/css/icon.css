@@ -1,0 +1,104 @@
+.bg-note-o {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -10px -10px;
+}
+.bg-note-d {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -62px -10px;
+}
+.bg-note-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -10px -62px;
+}
+/* .bg-暂停_2_ {
+    width: 32px; height: 32px;
+    background: url('css_sprites.png') -62px -62px;
+} */
+
+.bg-stop {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -114px -10px;
+}
+
+.bg-node-16 {
+	width: 16px;
+	height: 16px;
+	background: url("../img/icon_colorfull.png") -166px -166px;
+}
+
+.bg-random-16 {
+	width: 16px;
+	height: 16px;
+	background: url("../img/icon_colorfull.png") -218px -10px;
+}
+
+.bg-oneloop-16 {
+	width: 16px;
+	height: 16px;
+	background: url("../img/icon_colorfull.png") -218px -46px;
+}
+.bg-loop-16 {
+	width: 16px;
+	height: 16px;
+	background: url("../img/icon_colorfull.png") -218px -82px;
+}
+
+/* .bg-音符03 {
+    width: 32px; height: 32px;
+    background: url('css_sprites.png') -114px -62px;
+} */
+
+.bg-list-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -10px -114px;
+}
+/* .bg-音符01 {
+    width: 32px; height: 32px;
+    background: url('css_sprites.png') -62px -114px;
+} */
+.bg-like-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -114px -114px;
+}
+
+.bg-random-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -166px -10px;
+}
+
+.bg-share-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -166px -62px;
+}
+
+.bg-next-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -166px -114px;
+}
+
+.bg-last-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -10px -166px;
+}
+
+.bg-play-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -62px -166px;
+}
+
+.bg-stop-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/icon_colorfull.png") -114px -166px;
+}

@@ -13,7 +13,6 @@ export default new Vuex.Store({
     },
     getMusicIdMut (state, data) {
       state.musicdatas = data
-      console.log('store', data)
     }
   },
   actions: {

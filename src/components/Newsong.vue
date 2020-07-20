@@ -2,17 +2,17 @@
   <div id="newsong">
     <div class="contitle">新歌速递</div>
     <div class="type" v-if="state">
-      <span v-on:click="setType(listtype=0)">全部</span>
-      <span v-on:click="setType(listtype=7)">华语</span>
-      <span v-on:click="setType(listtype=96)">欧美</span>
-      <span v-on:click="setType(listtype=8)">日本</span>
-      <span v-on:click="setType(listtype=16)">韩国</span>
+      <span v-on:click="setType(0)">全部</span>
+      <span v-on:click="setType(7)">华语</span>
+      <span v-on:click="setType(96)">欧美</span>
+      <span v-on:click="setType(8)">日本</span>
+      <span v-on:click="setType(16)">韩国</span>
       <!-- <audio :src="musicurl" autoplay controls></audio> -->
     </div>
     <div id="s">
       <ul ref="songul">
         <li v-for="(newsong, index) in newsonglist" :key="index">
-          <div id="song" :songid="newsong.id" v-on:click="playAudio(newsong.id)">
+          <div id="song" :songid="newsong.id" v-on:click="playAudio(newsong)">
             <div id="dimg">
               <img :src="newsong.album.blurPicUrl+'?param=140y140'" alt />
             </div>
@@ -42,7 +42,7 @@ export default {
       slidedown: 0,
       slidetime: 0,
       slidetimetmp: 0,
-      listtype: 0,
+      // listtype: 0,
       musicurl: ''
     }
   },
@@ -66,8 +66,9 @@ export default {
         console.log(' up slidetimetmp,slidetime:', this.slidetimetmp, this.slidetime)
       }
     },
-    setType () {
-      axios.get('/top/song?type=' + this.listtype).then(res => {
+    setType (type) {
+      axios.get('/top/song?type=' + type).then(res => {
+        // console.log(res.data)
         this.newsonglist = res.data.data
         this.slidetime = parseInt(this.newsonglist.length / 15)
         this.slidetimetmp = parseInt(this.newsonglist.length / 15)
@@ -77,8 +78,8 @@ export default {
       this.$store.commit('getMusicIdMut', id)
     }
   },
-  beforeMount () {
-    axios.get('/top/song?type=' + this.listtype).then(res => {
+  mounted () {
+    axios.get('/top/song?type=0').then(res => {
       this.newsonglist = res.data.data
       this.slidetime = parseInt(this.newsonglist.length / 15)
       this.slidetimetmp = parseInt(this.newsonglist.length / 15)
@@ -96,6 +97,7 @@ export default {
   margin-top: 40px;
   border-top-right-radius: 10px;
   border-start-start-radius: 10px;
+  z-index: 999;
   // overflow: hidden;
   #s {
     position: relative;

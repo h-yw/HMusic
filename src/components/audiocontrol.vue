@@ -10,18 +10,38 @@
       <div class="pl-probarwrap">
         <div class="pl-probar" ref="probar"></div>
       </div>
+      <div class="pl-info">
+        <span>{{musicdata.name}}-</span>
+        <router-link
+          v-for="(artist, index) in musicdata.artists"
+          :key="index"
+          :to="{name:'singer',query:{id:artist.id}}"
+          :title="artist.name"
+        >{{artist.name}}</router-link>
+      </div>
       <div class="pl-time">
         <span>
           <i>{{formatTime(protime)}}</i>
-          /{{formatTime (this.audioobj.duration)!==NaN?formatTime (this.audioobj.duration):'00:00'}}
+          /{{formatTime (this.audioobj.duration)}}
         </span>
       </div>
-      <audio ref="audio" :src="musicurl" controls style="display:none"></audio>
+      <!-- <div class="pl-type">
+        <a class="pl-oneloop"></a>
+      </div>-->
+      <div class="pl-vol">
+        <span class="bg-note-32"></span>
+        <div class="pl-vol-barwrap">
+          <span class="pl-vol-btn" @mousedown.stop="changeVol($event)"></span>
+          <div class="pl-vol-bar"></div>
+        </div>
+      </div>
+      <audio ref="audio" :src="musicurl" style="display:none"></audio>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import '@/assets/css/icon.css'
 export default {
   data () {
     return {
@@ -31,11 +51,17 @@ export default {
       playtimer: null,
       probarlength: 0,
       musicurl: '',
-      musicid: ''
+      musicdata: '',
+      pltype: true
     }
   },
   methods: {
     play () {
+      if (this.audioobj.src === 'http://localhost:3001/') {
+        alert('播放列表为空！')
+        return
+      }
+      console.log('this.audioobj.src', this.audioobj.src)
       if (this.audioobj.paused) {
         this.$refs.playbtn.setAttribute('class', 'pl-play')
         this.progress(this.audioobj.duration, this.$refs.probar, this.playObj)
@@ -52,6 +78,10 @@ export default {
       }
     },
     formatTime (time) {
+      // console.log('time', time)
+      if (time === undefined || time === 0 || isNaN(time)) {
+        return '00:00'
+      }
       time = time / 60
       var m = 0
       var s = 0
@@ -76,10 +106,8 @@ export default {
         this.probarlength += step
         el.style.width = this.probarlength + '%'
         if (this.protime >= this.audioobj.duration) {
-          clearInterval(this.playtimer)
-          this.protime = 0
-          this.probarlength = 0
-          this.playtimer = null
+          this.cleanTimeAndBar()
+          el.style.width = '0'
           el2.setAttribute('class', 'pl-pause')
         }
       }, 1000)
@@ -94,6 +122,39 @@ export default {
         this.audioobj.play()
         this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
       })
+    },
+    changeVol (event) {
+      // el.stopPropagation()
+      var _this = this
+      var offsetY = event.clientY - event.target.offsetTop
+      var y = 0
+      // console.log(event.target.nextSibling)
+      event.target.parentNode.onmousemove = function (ev) {
+        ev.stopPropagation()
+        y = ev.clientY - offsetY
+        if (y <= 0) {
+          event.target.style.top = '0'
+          event.target.nextSibling.style.height = '100%'
+        } else if (y >= 75) {
+          event.target.style.top = '75px'
+          event.target.nextSibling.style.height = '0'
+        } else {
+          event.target.style.top = y + 'px'
+          console.log((75 - y) / 75, y)
+          _this.audioobj.volume = (75 - y) / 7
+          event.target.nextSibling.style.height = ((75 - y) / 75 * 100) + '%'
+        }
+      }
+      event.target.onmouseup = function () {
+        console.log('taiqi')
+        event.target.parentNode.onmousemove = null
+      }
+    },
+    cleanTimeAndBar () {
+      clearInterval(this.playtimer)
+      this.protime = 0
+      this.probarlength = 0
+      this.playtimer = null
     }
   },
   computed: {
@@ -106,20 +167,27 @@ export default {
   },
   watch: {
     storeState (val, old) {
-      this.$set(this.$data, 'musicid', val)
-      this.getMusicUrl(val).then(res => {
+      this.$set(this.$data, 'musicdata', val)
+      clearInterval(this.playtimer)
+      this.cleanTimeAndBar()
+      // if (val === old) {
+      //   val = old
+      // }
+      this.getMusicUrl(this.musicdata.id).then(res => {
         this.$set(this.$data, 'musicurl', res.data.data[0].url)
-        console.log(this.audioobj)
+        // console.log(this.audioobj)
       })
-      console.log(val, old)
+      // console.log(val, old)
     }
   },
   mounted () {
     if (this.$refs.audio !== undefined) {
       this.$set(this.$data, 'audioobj', this.$refs.audio)
-      console.log(this.audioobj.duration)
+      // console.log(this.audioobj.duration)
       this.canplayListener()
+      this.audioobj.volume = 0.5
     }
+    // console.log('for', this.formatTime(this.audioobj.duration))
   }
 }
 </script>
@@ -130,7 +198,7 @@ export default {
   width: 100%;
   height: 70px;
   background: #cad8e4;
-  z-index: 999;
+  z-index: 9990;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   #conbox {
     position: relative;
@@ -154,7 +222,7 @@ export default {
       width: 400px;
       height: 10px;
       border: 1px solid black;
-      top: 30px;
+      top: 35px;
       margin-left: 100px;
       border-radius: 5px;
       .pl-probar {
@@ -165,11 +233,24 @@ export default {
         border-end-end-radius: 5px;
       }
     }
+    .pl-info {
+      position: absolute;
+      top: 15px;
+      left: 100px;
+      font-size: 12px;
+      width: 170px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      a:hover {
+        text-decoration: underline;
+      }
+    }
     .pl-time {
       position: absolute;
       height: 13.6px;
       font-size: 12px;
-      top: 28.2px;
+      top: 33.2px;
       left: 505px;
       color: gray;
       span {
@@ -179,6 +260,62 @@ export default {
         font-style: normal;
       }
     }
+    .pl-vol {
+      position: absolute;
+      left: 574px;
+      span {
+        display: inline-block;
+      }
+      .pl-vol-barwrap {
+        display: none;
+        position: absolute;
+        height: 100px;
+        width: 25px;
+        border: 7.5px solid rgb(83, 82, 82);
+        border-top: 5px solid rgb(83, 82, 82);
+        border-bottom: 5px solid rgb(83, 82, 82);
+        top: -90px;
+        left: 20px;
+        background: rgb(36, 32, 32);
+        box-sizing: border-box;
+        .pl-vol-bar {
+          position: absolute;
+          // top: 0px;
+          bottom: 0px;
+          width: 100%;
+          height: 50%;
+          background: white;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
+        .pl-vol-btn {
+          position: absolute;
+          display: inline-block;
+          left: -2px;
+          top: 50%;
+          width: 15px;
+          height: 15px;
+          border: 3px solid rgb(79, 197, 243);
+          background: red;
+          border-radius: 50%;
+          box-sizing: border-box;
+          z-index: 9999;
+        }
+      }
+    }
+    .pl-vol:hover .pl-vol-barwrap {
+      display: block;
+    }
+    // .pl-type {
+    //   position: absolute;
+    //   left: 574px;
+    //   top: 35px;
+    //   a {
+    //     display: inline-block;
+    //     // width: 16px;
+    //     // height: 16px;
+    //   }
+    // }
   }
 }
 .pl-next {
