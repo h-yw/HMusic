@@ -10,15 +10,16 @@
         <router-link to="/my" tag="li">我的音乐</router-link>
       </ul>
     </div>
-
+    <audiocontrol></audiocontrol>
     <router-view />
   </div>
 </template>
 
 <script>
+import audiocontrol from './components/audiocontrol'
 export default {
   components: {
-
+    audiocontrol
   }
 }
 </script>

@@ -4,11 +4,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isPlaylistShow: true
+    isPlaylistShow: true,
+    musicdatas: ''
   },
   mutations: {
     hidePlaylist (state, data) {
       state.isPlaylistShow = data
+    },
+    getMusicIdMut (state, data) {
+      state.musicdatas = data
+      console.log('store', data)
     }
   },
   actions: {

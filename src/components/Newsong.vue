@@ -7,7 +7,7 @@
       <span v-on:click="setType(listtype=96)">欧美</span>
       <span v-on:click="setType(listtype=8)">日本</span>
       <span v-on:click="setType(listtype=16)">韩国</span>
-      <audio :src="musicurl" autoplay controls></audio>
+      <!-- <audio :src="musicurl" autoplay controls></audio> -->
     </div>
     <div id="s">
       <ul ref="songul">
@@ -74,10 +74,7 @@ export default {
       })
     },
     playAudio (id) {
-      axios.get('/song/url?id=' + id).then(res => {
-        console.log(res.data.data[0].url)
-        this.musicurl = res.data.data[0].url
-      })
+      this.$store.commit('getMusicIdMut', id)
     }
   },
   beforeMount () {

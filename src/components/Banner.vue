@@ -1,7 +1,8 @@
 <template>
   <div
+    v-if="banners!==undefined && backgroundnum!==undefined"
     id="banner"
-    :style="'background:url('+banners[backgroundnum].imageUrl+'?imageView&blur=40x20)'"
+    :style="banners[backgroundnum]!==undefined?'background:url('+banners[backgroundnum].imageUrl+'?imageView&blur=40x20)':''"
   >
     <div id="bannerlist">
       <ul>
@@ -28,11 +29,8 @@ export default {
     return {
       banners: [],
       dotnum: 0,
-      titleColor: [],
       currentIndex: 0,
       timer: null,
-      active: false,
-      dotactive: false,
       backgroundnum: 0,
       count: 0
     }
@@ -65,8 +63,6 @@ export default {
     }).catch(err => {
       console.log('err: ', err)
     })
-    console.log('mounted')
-    // this.count = 0
     this.timer = setInterval(() => {
       this.$set(this.$data, 'backgroundnum', this.count)
       this.$refs.imgli[this.count].setAttribute('style', 'opacity:1')
@@ -78,12 +74,8 @@ export default {
         }
       }
       this.count += 1
-      console.log(this.count)
       if (this.count === this.$refs.imgli.length) {
         this.count = 0
-        // clearInterval(this.timer)
-        // this.timer = null
-        console.log('clear', this.count)
       }
     }, 3000)
   },
@@ -91,7 +83,6 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.timer)
-    console.log('dddd')
     this.timer = null
   }
 }

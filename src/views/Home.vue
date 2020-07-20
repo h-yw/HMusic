@@ -16,12 +16,6 @@ export default {
   components: {
     banner,
     newsong
-  },
-  mounted () {
-    // console.log(this)
-  },
-  beforeUpdate () {
-    // console.log(this)
   }
 }
 </script>
