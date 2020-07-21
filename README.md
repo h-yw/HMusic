@@ -5,6 +5,7 @@
 1.  推荐
 
     ![推荐.png](https://i.loli.net/2020/07/22/EJGFScn8yrYMKiZ.png)
+    ![推荐.png](./test/推荐.png)
 
 2.  排行榜
 
