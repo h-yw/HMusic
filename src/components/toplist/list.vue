@@ -18,7 +18,7 @@
       <div id="content">
         <div class="cs">
           <span class="cst">歌曲列表</span>
-          <audio :src="this.songUrl" autoplay controls></audio>
+          <!-- <audio :src="this.songUrl" autoplay controls></audio> -->
         </div>
         <ul>
           <li v-for="(songDetail, index) in songsDetail" :key="index">
@@ -30,7 +30,7 @@
               </span>
               <span
                 class="s-p-svg"
-                v-on:click="play(id=songDetail.id,$event)"
+                v-on:click="play(songDetail,$event)"
                 :flagId="'play_'+songDetail.id"
               ></span>
               <div class="d-name-a">
@@ -81,7 +81,7 @@ export default {
         this.songIds[i] = data[i].id
       }
     },
-    play (id, event) {
+    play (datas, event) {
       this.isShow = !this.isShow
       if (this.lastplay) {
         this.lastplay.classList.remove('active')
@@ -94,11 +94,13 @@ export default {
         event.target.classList.remove('active')
       } else {
         event.target.classList.add('active')
-        axios.get('/song/url?id=' + id).then(res => {
-          this.songUrl = res.data.data[0].url
-        }).catch(err => {
-          console.log('err: ', err)
-        })
+        this.$bus.emit('message', datas)
+        console.log('datas', datas)
+        // axios.get('/song/url?id=' + id).then(res => {
+        //   this.songUrl = res.data.data[0].url
+        // }).catch(err => {
+        //   console.log('err: ', err)
+        // })
       }
     }
   },

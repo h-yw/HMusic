@@ -55,7 +55,7 @@
 .bg-list-32 {
 	width: 32px;
 	height: 32px;
-	background: url("../img/icon_colorfull.png") -10px -114px;
+	background: url("../img/icon_colorfull.png") -10px -117px;
 }
 /* .bg-音符01 {
     width: 32px; height: 32px;
@@ -98,6 +98,7 @@
 }
 
 .bg-stop-32 {
+	display: inline-block;
 	width: 32px;
 	height: 32px;
 	background: url("../img/icon_colorfull.png") -114px -166px;

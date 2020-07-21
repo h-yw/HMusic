@@ -39,10 +39,10 @@
     </div>
     <div id="listcontent">
       <div class="playc">
-        <span>{{playlist.playCount}}</span>
+        <!-- <span>{{playlist.playCount}}</span> -->
       </div>
       <!-- frame="border"   cellpadding="2"border="5"  cellpadding="0"-->
-      <audio v-if="songurl!==''" :src="songurl" autoplay controls></audio>
+      <!-- <audio v-if="songurl!==''" :src="songurl" autoplay controls></audio> -->
       <table cellspacing="0">
         <thead>
           <tr height="30px">
@@ -59,14 +59,14 @@
               <div>
                 <span>{{index+1}}</span>
                 <!-- @click.prevent="getMusicUrl(id=item.id)" -->
-                <span></span>
+                <span @click.prevent="getMusicUrl(item)"></span>
               </div>
             </td>
             <td>
               <span
                 :soid="item.id"
                 :title="item.name"
-                @click.prevent="getMusicUrl(id=item.id)"
+                @click.prevent="getMusicUrl(item)"
               >{{item.name}}</span>
             </td>
             <td>
@@ -110,12 +110,14 @@ export default {
     }
   },
   methods: {
-    getMusicUrl (id) {
-      console.log(id)
-      axios.get('/song/url?id=' + id).then(res => {
-        console.log(res.data)
-        this.songurl = res.data.data[0].url
-      })
+    getMusicUrl (data) {
+      console.log(data)
+      this.$bus.emit('message', data)
+      // axios.get('/song/url?id=' + id).then(res => {
+      //   console.log(res.data)
+      //   this.songurl = res.data.data[0].url
+      // })
+      this.messagedata = data
     },
     formatDate (timestmp) {
       var t = new Date(timestmp)

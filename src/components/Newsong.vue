@@ -76,6 +76,7 @@ export default {
     },
     playAudio (id) {
       this.$store.commit('getMusicIdMut', id)
+      this.$bus.emit('message', id)
     }
   },
   mounted () {
@@ -98,6 +99,7 @@ export default {
   border-top-right-radius: 10px;
   border-start-start-radius: 10px;
   z-index: 999;
+  // bottom: 80px;
   // overflow: hidden;
   #s {
     position: relative;

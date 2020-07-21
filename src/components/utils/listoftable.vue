@@ -5,7 +5,7 @@
         <span></span>
       </div>-->
       <!-- frame="border"   cellpadding="2"border="5"  cellpadding="0"-->
-      <audio v-if="playurl!==''" :src="playurl" autoplay controls></audio>
+      <!-- <audio v-if="playurl!==''" :src="playurl" autoplay controls></audio> -->
       <table cellspacing="0">
         <thead>
           <tr height="30px">
@@ -21,7 +21,7 @@
             <td>
               <div>
                 <span>{{index+1}}</span>
-                <span @click.prevent="getMusicUrl(id=data.id)"></span>
+                <span @click.prevent="getMusicUrl(data)"></span>
               </div>
             </td>
             <td>
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   data () {
     return {
@@ -58,16 +58,17 @@ export default {
   },
   props: ['singerhot'],
   methods: {
-    getMusicUrl (id) {
-      console.log(id)
-      axios.get('/song/url?id=' + id).then(res => {
-        console.log(res.data)
-        if (res.data.data[0].url !== null) {
-          this.playurl = res.data.data[0].url
-        } else {
-          alert('无版权')
-        }
-      })
+    getMusicUrl (data) {
+      // console.log(data)
+      this.$bus.emit('message', data)
+      // axios.get('/song/url?id=' + id).then(res => {
+      //   console.log(res.data)
+      //   if (res.data.data[0].url !== null) {
+      //     this.playurl = res.data.data[0].url
+      //   } else {
+      //     alert('无版权')
+      //   }
+      // })
     },
     formatDate (timestmp) {
       var t = new Date(timestmp)
