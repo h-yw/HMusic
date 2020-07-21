@@ -4,38 +4,38 @@
 
 1.  推荐
 
-    ![推荐页](./test/推荐.png)
+    ![推荐.png](https://i.loli.net/2020/07/22/EJGFScn8yrYMKiZ.png)
 
 2.  排行榜
 
-    ![排行榜](./test/排行榜.png)
+    ![排行榜.png](https://i.loli.net/2020/07/22/J1wdSiW9pzAM7Z3.png)
 
 3.  歌单
 
-    ![歌单](./test/歌单.png)
+    ![歌单.png](https://i.loli.net/2020/07/22/sygqlivNQjULt6K.png)
 
 4.  歌手
 
     - 歌手分类
 
-      ![歌手分类](./test/歌手.png)
+      ![歌手.png](https://i.loli.net/2020/07/22/sNdPpaDiSkYnWHz.png)
 
     - 歌手 MV
 
-      ![歌手MV](./test/歌手mv.png)
+      ![歌手mv.png](https://i.loli.net/2020/07/22/ynMt7VDPOABqZl8.png)
 
     - 歌手热歌
 
-      ![歌手热歌](./test/歌手详情页.png)
+      ![歌手详情页.png](https://i.loli.net/2020/07/22/XTEtWdI9YhOKQlJ.png)
 
-    - 歌手热歌
+    - 歌手介绍
 
-      ![歌手热歌](./test/歌手介绍.png)
+      ![歌手介绍.png](https://i.loli.net/2020/07/22/WnrISgk46EPyJeM.png)
 
 5.  新碟上架
 
-    ![新碟上架](./test/新碟上架.png)
-    ![新碟详情](./test/新碟详情.png)
+    ![新碟上架.png](https://i.loli.net/2020/07/22/xFqIaGfsLYd1ry4.png)
+    ![新碟详情.png](https://i.loli.net/2020/07/22/IkijMrHANS6gZK8.png)
 
 ## 安装
 
