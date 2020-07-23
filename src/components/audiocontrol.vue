@@ -27,9 +27,9 @@
           /{{formatTime (this.audioobj.duration)}}
         </span>
       </div>
-      <!-- <div class="pl-type">
-        <a class="pl-oneloop"></a>
-      </div>-->
+      <div class="pl-type">
+        <span class="bg-oneloop-32" @click.stop="changetype($event)"></span>
+      </div>
       <div class="pl-vol">
         <span class="bg-note-32"></span>
         <div class="pl-vol-barwrap">
@@ -62,7 +62,14 @@
           </ul>
         </div>
       </div>
-      <audio ref="audio" :src="musicurl" style="display:none"></audio>
+      <audio
+        @canplay="canplayListener"
+        @ended="playendListener"
+        ref="audio"
+        :src="musicurl"
+        style="display:none"
+        :loop="looptype?true:false"
+      ></audio>
     </div>
   </div>
 </template>
@@ -81,7 +88,9 @@ export default {
       musicdatas: [],
       currentmusic: '',
       musicid: '',
-      pltype: true
+      pltype: true,
+      looptype: true,
+      musicids: []
     }
   },
   methods: {
@@ -146,13 +155,21 @@ export default {
       return axios.get('/song/url?id=' + id)
     },
     canplayListener () {
-      this.audioobj.addEventListener('canplay', () => {
-        console.log('OK')
+      // this.audioobj.addEventListener('canplay', () => {
+      alert('可以播放了！')
+      this.cleanTimeAndBar()
+      this.$refs.playbtn.setAttribute('class', 'pl-play')
+      this.audioobj.play()
+      this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
+      // })
+    },
+    playendListener () {
+      alert('结束了！')
+      if (this.looptype) {
+        alert('进来了')
         this.cleanTimeAndBar()
-        this.$refs.playbtn.setAttribute('class', 'pl-play')
-        this.audioobj.play()
         this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
-      })
+      }
     },
     changeVol (event) {
       // el.stopPropagation()
@@ -215,6 +232,15 @@ export default {
       //     _this.progress(_this.audioobj.duration, _this.$refs.probar, _this.$refs.playbtn)
       //   }
     },
+    changetype (ev) {
+      this.looptype = !this.looptype
+      if (this.looptype) {
+        alert(this.looptype)
+        ev.target.setAttribute('class', 'bg-oneloop-32')
+      } else {
+        ev.target.setAttribute('class', 'bg-loop-32')
+      }
+    },
     getsongsId (id, ev) {
       console.log(id, ev.target.parentNode.parentNode)
       ev.target.parentNode.parentNode.setAttribute('class', 'bg-play-active')
@@ -258,8 +284,9 @@ export default {
   mounted () {
     if (this.$refs.audio !== undefined) {
       this.$set(this.$data, 'audioobj', this.$refs.audio)
-      this.canplayListener()
+      // this.canplayListener()
       this.audioobj.volume = 0.5
+      // this.audioobj.loop = true
     }
     this.$bus.off('message')
     this.$bus.on('message', res => {
@@ -270,6 +297,7 @@ export default {
       if (this.musicdatas.indexOf(res) === -1) {
         console.log(this.musicdatas.indexOf(res))
         this.musicdatas.push(res)
+        this.musicids.push(res.id)
       }
       this.getMusicUrl(res.id).then(res => {
         this.$set(this.$data, 'musicurl', res.data.data[0].url)
@@ -515,16 +543,16 @@ export default {
     .pl-slist:hover .pl-list-screen {
       display: block;
     }
-    // .pl-type {
-    //   position: absolute;
-    //   left: 574px;
-    //   top: 35px;
-    //   a {
-    //     display: inline-block;
-    //     // width: 16px;
-    //     // height: 16px;
-    //   }
-    // }
+    .pl-type {
+      position: absolute;
+      left: 574px;
+      top: 35px;
+      span {
+        display: inline-block;
+        // width: 16px;
+        // height: 16px;
+      }
+    }
   }
 }
 .pl-next {

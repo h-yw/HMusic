@@ -47,6 +47,16 @@
 	background: url("../img/icon_colorfull.png") -218px -82px;
 }
 
+.bg-oneloop-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/oneloop.png"); /*-218px -46px;*/
+}
+.bg-loop-32 {
+	width: 32px;
+	height: 32px;
+	background: url("../img/loop.png"); /*-218px -82px;*/
+}
 /* .bg-音符03 {
     width: 32px; height: 32px;
     background: url('css_sprites.png') -114px -62px;

@@ -63,7 +63,7 @@
         <router-link
           :to="{name:'singer',query:{id:artist.id}}"
           v-for=" artist in artists"
-          :key="artist.id"
+          :key="(new Date()).valueOf()+'-'+artist.id"
           tag="li"
         >
           <div class="art-img">
@@ -128,9 +128,11 @@ export default {
         type: '',
         area: '',
         initial: '',
-        limit: '',
+        limit: '32',
         offset: ''
       },
+      varoffset: 1,
+      pagenum: 0,
       selectHot: true
     }
   },
@@ -204,7 +206,28 @@ export default {
           target.setAttribute('class', 'active')
         }
       }
+    },
+    handleScroll () {
+      console.log()
+      if (document.documentElement.scrollHeight === document.documentElement.scrollTop + document.documentElement.clientHeight) {
+        this.pagenum += 1
+        this.varoffset = (this.pagenum - 1) * 32
+        this.params.offset = this.varoffset
+        var promise = new Promise((resolve, reject) => {
+          this.getAxiosObj(this.params).then(res => {
+            resolve(res.data.artists)
+          })
+        })
+        promise.then(value => {
+          var timer = setTimeout(() => {
+            alert('加载等待')
+          }, 3000)
+          this.$set(this.$data, 'artists', this.artists.concat(value))
+          clearTimeout(timer)
+        })
+      }
     }
+
   },
   watch: {
     params: {
@@ -223,18 +246,13 @@ export default {
     // ]
   },
   mounted () {
-    this.getAxiosObj({
-      type: '-1',
-      area: '-1',
-      initila: '0'
-    }).then(res => {
-      this.$set(this.$data, 'artists', res.data.artists)
-    })
-    // console.log(this.$data)
+    window.addEventListener('scroll', this.handleScroll, true)
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll, true)
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .active {
   background: #c20c0c;
