@@ -39,12 +39,18 @@ export default {
       albums: [],
       isShowoFloatscreen: false,
       propdatas: '',
-      isShowScreen: false
+      isShowScreen: false,
+      params: {
+        limit: '15',
+        offset: ''
+      },
+      pageNum: 1,
+      varoffset: 0
     }
   },
   methods: {
     getAxiosObj ({ limit, offset }) {
-      limit = arguments[0] || '50'
+      limit = arguments[0] || '15'
       // offset= arguments[1] || '-1'
       var params = ''
       if (!arguments[0]) {
@@ -53,9 +59,13 @@ export default {
         params = '?'
         var keys = Object.getOwnPropertyNames(arguments[0])
         keys.forEach(el => {
-          params += el + '=' + arguments[0][el] + '&'
+          if (el !== '__ob__') {
+            // console.log('el', el)
+            params += el + '=' + arguments[0][el] + '&'
+          }
         })
       }
+      console.log('/top/album' + params.replace(/&$/, ''))
       return axios.get('/top/album' + params.replace(/&$/, ''))
     },
     showScreen (id) {
@@ -63,19 +73,42 @@ export default {
       this.isShowoFloatscreen = false // !this.isShowoFloatscreen
       this.$set(this.$data, 'propdatas', id)
       this.isShowScreen = true
+    },
+    handleScroll () {
+      var scrollTouchdown = document.documentElement.scrollHeight - document.documentElement.scrollTop - document.documentElement.clientHeight
+      // console.log(scrollTouchdown)
+      if (scrollTouchdown <= 0) {
+        alert('触底')
+        this.$set(this.$data, 'pageNum', this.pageNum + 1)
+        this.varoffset = (this.pageNum - 1) * 15
+        this.params.offset = this.varoffset
+        this.getAxiosObj(this.params).then(res => {
+          if (res.data.albums.length !== 0) {
+            res.data.albums.forEach(el => {
+              this.albums.push(el)
+            })
+          } else {
+            alert('专辑都失踪了吗?')
+          }
+        })
+      }
     }
   },
   updated () {
     this.isShowoFloatscreen = true
   },
   mounted () {
-    this.getAxiosObj({}).then(res => {
+    window.addEventListener('scroll', this.handleScroll, true)
+    this.getAxiosObj(this.params).then(res => {
       if (res.data.albums.length !== 0) {
         this.albums = res.data.albums
       } else {
         alert('专辑都失踪了吗?')
       }
     })
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll, true)
   },
   components: {
     floatscreen

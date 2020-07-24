@@ -131,8 +131,8 @@ export default {
         limit: '32',
         offset: ''
       },
-      varoffset: 1,
-      pagenum: 0,
+      varoffset: 0,
+      pagenum: 1,
       selectHot: true
     }
   },
@@ -173,23 +173,25 @@ export default {
           }
         })
       }
-      // console.log(params.replace(/&{0,2}}$/g, ''))
       return axios.get('/artist/list?' + params.replace(/&$/, ''))
     },
     getTypeId (event) {
       if (event.target.dataset.type !== undefined) {
         this.doActive(event.target)
+        this.artists = []
         this.$set(this.params, 'type', event.target.dataset.type)
       }
     },
     getAreaId (event) {
       if (event.target.dataset.area) {
         this.doActive(event.target)
+        this.artists = []
         this.$set(this.params, 'area', event.target.dataset.area)
       }
     },
     getAlphabetId (event) {
       console.log(event.target)
+      this.artists = []
       if (event.target.dataset.alph === '-1') {
         this.selectHot = !this.selectHot
       }
@@ -208,42 +210,28 @@ export default {
       }
     },
     handleScroll () {
-      console.log()
-      if (document.documentElement.scrollHeight === document.documentElement.scrollTop + document.documentElement.clientHeight) {
-        this.pagenum += 1
+      var scrollTouchdown = document.documentElement.scrollHeight - document.documentElement.scrollTop - document.documentElement.clientHeight
+      // console.log(scrollTouchdown)
+      if (scrollTouchdown <= 0) {
+        alert('触底')
+        this.$set(this.$data, 'pagenum', this.pagenum + 1)
         this.varoffset = (this.pagenum - 1) * 32
         this.params.offset = this.varoffset
-        var promise = new Promise((resolve, reject) => {
-          this.getAxiosObj(this.params).then(res => {
-            resolve(res.data.artists)
-          })
-        })
-        promise.then(value => {
-          var timer = setTimeout(() => {
-            alert('加载等待')
-          }, 3000)
-          this.$set(this.$data, 'artists', this.artists.concat(value))
-          clearTimeout(timer)
-        })
       }
     }
-
   },
   watch: {
     params: {
       handler () {
-        // console.log(this.params)
         this.getAxiosObj(this.params).then(res => {
-          this.$set(this.$data, 'artists', res.data.artists)
-          // console.log(this.artists)
+          res.data.artists.forEach(el => {
+            this.artists.push(el)
+          })
         })
       },
       deep: true,
       immediate: true
     }
-    // params: [
-    //   function type (val, oldVal) { console.log('watch', val, oldVal) }
-    // ]
   },
   mounted () {
     window.addEventListener('scroll', this.handleScroll, true)
@@ -400,7 +388,7 @@ export default {
     ul {
       min-width: 500px;
       padding-top: 20px;
-      overflow: hidden;
+      // overflow: hidden;
       clear: both;
       padding-left: 30px;
       li {
