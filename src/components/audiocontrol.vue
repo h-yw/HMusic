@@ -167,10 +167,11 @@ export default {
         this.currentId = this.currentmusic.id
       } else {
         this.loopid += 1
+        if (this.loopid > this.musicids.length - 1) {
+          this.loopid = 0
+        }
         this.currentId = this.musicids[this.loopid]
-      }
-      if (this.loopid > this.musicids.length - 1) {
-        this.loopid = 0
+        this.currentmusic = this.musicdatas[this.loopid]
       }
       this.checkMusic(this.currentId).then(resp => {
         if (resp.message === 'ok') {
