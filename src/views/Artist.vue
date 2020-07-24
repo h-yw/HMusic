@@ -211,9 +211,8 @@ export default {
     },
     handleScroll () {
       var scrollTouchdown = document.documentElement.scrollHeight - document.documentElement.scrollTop - document.documentElement.clientHeight
-      // console.log(scrollTouchdown)
-      if (scrollTouchdown <= 0) {
-        alert('触底')
+      if (scrollTouchdown - 1 <= 0) {
+        // alert('触底')
         this.$set(this.$data, 'pagenum', this.pagenum + 1)
         this.varoffset = (this.pagenum - 1) * 32
         this.params.offset = this.varoffset

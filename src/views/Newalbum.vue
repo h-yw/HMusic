@@ -77,8 +77,8 @@ export default {
     handleScroll () {
       var scrollTouchdown = document.documentElement.scrollHeight - document.documentElement.scrollTop - document.documentElement.clientHeight
       // console.log(scrollTouchdown)
-      if (scrollTouchdown <= 0) {
-        alert('触底')
+      if (scrollTouchdown - 1 <= 0) {
+        // alert('触底')
         this.$set(this.$data, 'pageNum', this.pageNum + 1)
         this.varoffset = (this.pageNum - 1) * 15
         this.params.offset = this.varoffset

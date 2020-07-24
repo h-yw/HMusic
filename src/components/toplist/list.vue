@@ -95,12 +95,6 @@ export default {
       } else {
         event.target.classList.add('active')
         this.$bus.emit('message', datas)
-        console.log('datas', datas)
-        // axios.get('/song/url?id=' + id).then(res => {
-        //   this.songUrl = res.data.data[0].url
-        // }).catch(err => {
-        //   console.log('err: ', err)
-        // })
       }
     }
   },

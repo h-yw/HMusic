@@ -68,7 +68,6 @@
         ref="audio"
         :src="musicurl"
         style="display:none"
-        :loop="looptype?true:false"
       ></audio>
     </div>
   </div>
@@ -90,7 +89,10 @@ export default {
       musicid: '',
       pltype: true,
       looptype: true,
-      musicids: []
+      musicids: [],
+      checkurl: false,
+      loopid: 0,
+      currentId: ''
     }
   },
   methods: {
@@ -151,25 +153,35 @@ export default {
       }, 1000)
     },
     getMusicUrl (id) {
-      console.log('dododod')
       return axios.get('/song/url?id=' + id)
     },
     canplayListener () {
-      // this.audioobj.addEventListener('canplay', () => {
-      alert('可以播放了！')
       this.cleanTimeAndBar()
       this.$refs.playbtn.setAttribute('class', 'pl-play')
       this.audioobj.play()
       this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
-      // })
     },
     playendListener () {
-      alert('结束了！')
+      this.cleanTimeAndBar()
       if (this.looptype) {
-        alert('进来了')
-        this.cleanTimeAndBar()
-        this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
+        this.currentId = this.currentmusic.id
+      } else {
+        this.loopid += 1
+        this.currentId = this.musicids[this.loopid]
       }
+      if (this.loopid > this.musicids.length - 1) {
+        this.loopid = 0
+      }
+      this.checkMusic(this.currentId).then(resp => {
+        if (resp.message === 'ok') {
+          this.getMusicUrl(this.currentId).then(res => {
+            this.$set(this.$data, 'musicurl', res.data.data[0].url)
+          })
+        } else {
+        }
+      })
+      this.progress(this.audioobj.duration, this.$refs.probar, this.$refs.playbtn)
+      this.audioobj.play()
     },
     changeVol (event) {
       // el.stopPropagation()
@@ -270,6 +282,13 @@ export default {
         s = parseInt(t % 1 * 60).toString().replace('', 0).substr(-2)
       }
       return m + ':' + s
+    },
+    checkMusic (id) {
+      return new Promise((resolve, reject) => {
+        axios.get('/check/music?id=' + id).then(res => {
+          resolve(res.data)
+        })
+      })
     }
   },
   computed: {
@@ -277,30 +296,26 @@ export default {
       return this.$store.state.musicdatas
     }
   },
-  // watch: {
-  //   storeState (val, old) {
-  //   }
-  // },
   mounted () {
     if (this.$refs.audio !== undefined) {
       this.$set(this.$data, 'audioobj', this.$refs.audio)
-      // this.canplayListener()
       this.audioobj.volume = 0.5
-      // this.audioobj.loop = true
     }
     this.$bus.off('message')
     this.$bus.on('message', res => {
-      clearInterval(this.playtimer)
       this.cleanTimeAndBar()
-      console.log('id', res)
       this.$set(this.$data, 'currentmusic', res)
       if (this.musicdatas.indexOf(res) === -1) {
-        console.log(this.musicdatas.indexOf(res))
         this.musicdatas.push(res)
         this.musicids.push(res.id)
       }
-      this.getMusicUrl(res.id).then(res => {
-        this.$set(this.$data, 'musicurl', res.data.data[0].url)
+      this.checkMusic(res.id).then(resp => {
+        if (resp.message === 'ok') {
+          this.getMusicUrl(res.id).then(res => {
+            this.$set(this.$data, 'musicurl', res.data.data[0].url)
+          })
+        } else {
+        }
       })
     })
   }

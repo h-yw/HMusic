@@ -97,13 +97,6 @@ export default {
     if (this.$route.name === 'singer') {
       this.$set(this.$data, 'datas', this.singerhot)
     }
-    if (this.$route.name === 'Newalbum') {
-      console.log('l', this.singerhot)
-      console.log('l-d', this.datas.length)
-    }
-    console.log('l', this.singerhot)
-    console.log('l-d', this.datas.length)
-    // this.$set(this.$data, 'isShowName', this.singerhot.hotSongs[0].isShowName)
   }
 }
 </script>
